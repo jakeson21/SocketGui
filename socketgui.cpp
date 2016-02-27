@@ -4,7 +4,8 @@
 SocketGUI::SocketGUI(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::SocketGUI),
-    server()
+    mMethodCallback(this, &SocketGUI::handle_receive),
+    server(mMethodCallback)
 {
     ui->setupUi(this);
 
@@ -13,12 +14,15 @@ SocketGUI::SocketGUI(QWidget *parent) :
     group->addButton(ui->radioMakeClient);
     group->setExclusive(true);
 
+//    qRegisterMetaType<QTextBlock>("QTextBlock");
+//    qRegisterMetaType<QTextCursor>("QTextCursor");
+
     //connect buttonClicked signal to our custom slot 'buttonClick'
     connect(group, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(buttonServerClientSelectClick(QAbstractButton*)));
     connect(ui->buttonServerListen, SIGNAL(clicked(bool)), this, SLOT(buttonServerListen_clicked(bool)));
     connect(ui->buttonClientConnect, SIGNAL(clicked(bool)), this, SLOT(buttonClientConnect_clicked(bool)));
 
-    connect(this, &SocketGUI::updateReceivedText, this, &SocketGUI::onUpdateReceivedText);
+    connect(this, &SocketGUI::updateReceivedText, this, &SocketGUI::onUpdateReceivedText, Qt::QueuedConnection);
 }
 
 SocketGUI::~SocketGUI()
@@ -46,10 +50,13 @@ void SocketGUI::buttonServerListen_clicked(bool)
     if (ui->buttonServerListen->isChecked())
     {
         PRINT("Listen ON");
+
+        // configure server
         server.listen_on(ui->ipReceiveOn->text().toStdString(), ui->portReceiveOn->text().toInt());
-//        boost::thread t(boost::bind(&boost::asio::io_service::run, mRxIoService));
-        boost::thread t(boost::bind(&Comm::UdpServer::Run, &server));
-        t.detach();
+
+        // Start server thread
+        server.Start();
+
         ui->buttonServerListen->setText(QString("Stop Listening"));
     }
     else
@@ -60,44 +67,55 @@ void SocketGUI::buttonServerListen_clicked(bool)
     }
 }
 
-void SocketGUI::handle_receive(const boost::system::error_code& error,
-        std::size_t bytes_transferred)
+void SocketGUI::handle_receive(const boost::shared_ptr<std::vector<uint8_t> >& inData,
+                               const boost::shared_ptr<udp::endpoint>& inEndpoint)
 {
-    PRINT("handle_receive()");
-    if (!error || error == boost::asio::error::message_size)
+    QString receivedData;
+    std::vector<uint8_t> data;
+    BOOST_FOREACH(uint8_t byte, *inData)
     {
-        PRINT("UDP packet received");
-
-        std::vector<char> aData(server.recv_buffer_.begin(), server.recv_buffer_.end());
-        std::cout << std::endl << "=========================================" << std::endl;
-        std::cout << "Received " << bytes_transferred << " bytes from " << server.mReceiveRemoteEndpoint.address().to_string()
-                      << ":" << server.mReceiveRemoteEndpoint.port() << std::endl;
-
-        QString receivedData;
-        BOOST_FOREACH(char byte, aData)
-        {
-            receivedData += QString(byte);
-        }
-        ui->textEditReceive->appendPlainText(receivedData);
-        emit onUpdateReceivedText();
-
-        server.start_receive();
+        data.push_back(byte);
+        receivedData += QString(byte);
     }
-    else if (error == boost::asio::error::operation_aborted)
-    {
-        PRINT("asio::error::operation_aborted in handle_receive()");
-    }
+    std::cout << "Address=" << inEndpoint->address().to_string() << ":" << inEndpoint->port() << std::endl;
+    ui->textEditReceive->appendPlainText(receivedData);
+    emit updateReceivedText();
 }
+
 
 void SocketGUI::buttonClientConnect_clicked(bool)
 {
-    server.mSendRemoteEndpoint = server.send_on(ui->ipRemoteSendTo->text().toStdString(), ui->portRemoteSendTo->text().toInt());
-    boost::shared_ptr<std::string> message(new std::string("Hello"));
-    server.send_to(message, server.mSendRemoteEndpoint);
+
+}
+
+void  SocketGUI::on_buttonSend_clicked(bool /*inChecked*/)
+{
+    PRINT("CLICKED");
+    udp::endpoint aEndPoint;
+    try
+    {
+        aEndPoint = server.send_on(ui->ipRemoteSendTo->text().toStdString(), ui->portRemoteSendTo->text().toInt());
+    }
+    catch (boost::system::error_code& ec)
+    {
+        std::cout << "Caught error: " << ec.value() << " " << ec.message() << std::endl;
+    }
+    std::string* msg = new std::string(ui->textEditSend->toPlainText().toStdString());
+    boost::shared_ptr<std::string> message(msg);
+    PRINT("SENDING");
+    server.send_to(message, aEndPoint);
+
+    PRINT("SENT");
+    ui->textEditSend->clear();
+}
+
+void  SocketGUI::on_buttonClear_clicked(bool /*inChecked*/)
+{
+    ui->textEditReceive->clear();
 }
 
 void SocketGUI::onUpdateReceivedText()
 {
-    std::cout << "Caught onUpdateReceivedText()" << std::endl;
-    this->update();
+    PRINT("Signal caught");
+    ui->textEditReceive->update();
 }
