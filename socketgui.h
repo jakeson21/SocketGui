@@ -8,11 +8,8 @@
 #include <QMetaType>
 #include <QTextBlock>
 
-
 #include </home/fuguru/git/UdpServer/udpserver.hpp>
-#include </home/fuguru/git/GenericDelegateTest/GenericDelegate.h>
-//#include </home/fuguru/git/tinyxml2/tinyxml2.h>
-//#include </home/fuguru/git/xmls/XMLSerialization.h>
+#include </home/fuguru/git/GenericDelegate/GenericDelegate.h>
 
 #include <boost/thread/thread.hpp>
 
