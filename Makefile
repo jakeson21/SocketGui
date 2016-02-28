@@ -33,7 +33,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = SocketGUI1.0.0
-DISTDIR = /home/fuguru/git/SocketGUI/SocketGUI/.tmp/SocketGUI1.0.0
+DISTDIR = .tmp/SocketGUI1.0.0
 LINK          = g++
 LFLAGS        = -m64
 LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -L/usr/lib -lboost_thread -lboost_system -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -313,15 +313,15 @@ compiler_rcc_clean:
 compiler_moc_header_make_all: moc_socketgui.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_socketgui.cpp
-moc_socketgui.cpp: /home/fuguru/git/UdpServer/udpserver.hpp \
+moc_socketgui.cpp: ../../UdpServer/udpserver.hpp \
 		../../UdpServer/MessageTypes.h \
 		../../UdpServer/daytimestring.hpp \
 		../../tinyxml2/tinyxml2.h \
 		../../xmls/XMLSerialization.h \
-		/home/fuguru/git/tinyxml2/tinyxml2.h \
-		/home/fuguru/git/xmls/XMLSerialization.h \
+		../../tinyxml2/tinyxml2.h \
+		../../xmls/XMLSerialization.h \
 		socketgui.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/fuguru/git/SocketGUI/SocketGUI -I/home/fuguru/git/UdpServer -I/home/fuguru/git/tinyxml2 -I/home/fuguru/git/xmls -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include socketgui.h -o moc_socketgui.cpp
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I. -I../../UdpServer -I../../tinyxml2 -I../../xmls -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include socketgui.h -o moc_socketgui.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -342,23 +342,23 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 main.o: main.cpp socketgui.h \
-		/home/fuguru/git/UdpServer/udpserver.hpp \
+		../../UdpServer/udpserver.hpp \
 		../../UdpServer/MessageTypes.h \
 		../../UdpServer/daytimestring.hpp \
 		../../tinyxml2/tinyxml2.h \
 		../../xmls/XMLSerialization.h \
-		/home/fuguru/git/tinyxml2/tinyxml2.h \
-		/home/fuguru/git/xmls/XMLSerialization.h
+		../../tinyxml2/tinyxml2.h \
+		../../xmls/XMLSerialization.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 socketgui.o: socketgui.cpp socketgui.h \
-		/home/fuguru/git/UdpServer/udpserver.hpp \
+		../../UdpServer/udpserver.hpp \
 		../../UdpServer/MessageTypes.h \
 		../../UdpServer/daytimestring.hpp \
 		../../tinyxml2/tinyxml2.h \
 		../../xmls/XMLSerialization.h \
-		/home/fuguru/git/tinyxml2/tinyxml2.h \
-		/home/fuguru/git/xmls/XMLSerialization.h \
+		../../tinyxml2/tinyxml2.h \
+		../../xmls/XMLSerialization.h \
 		ui_socketgui.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o socketgui.o socketgui.cpp
 

@@ -9,18 +9,8 @@ SocketGUI::SocketGUI(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QButtonGroup* group = new QButtonGroup(ui->centralWidget);
-    group->addButton(ui->radioMakeServer);
-    group->addButton(ui->radioMakeClient);
-    group->setExclusive(true);
-
-//    qRegisterMetaType<QTextBlock>("QTextBlock");
-//    qRegisterMetaType<QTextCursor>("QTextCursor");
-
     //connect buttonClicked signal to our custom slot 'buttonClick'
-    connect(group, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(buttonServerClientSelectClick(QAbstractButton*)));
-    connect(ui->buttonServerListen, SIGNAL(clicked(bool)), this, SLOT(buttonServerListen_clicked(bool)));
-    connect(ui->buttonClientConnect, SIGNAL(clicked(bool)), this, SLOT(buttonClientConnect_clicked(bool)));
+//    connect(ui->buttonServerListen, SIGNAL(clicked(bool)), this, SLOT(buttonServerListen_clicked(bool)));
 
     connect(this, &SocketGUI::updateReceivedText, this, &SocketGUI::onUpdateReceivedText, Qt::QueuedConnection);
 }
@@ -30,22 +20,7 @@ SocketGUI::~SocketGUI()
     delete ui;
 }
 
-void SocketGUI::buttonServerClientSelectClick(QAbstractButton* button)
-{
-    std::string source = button->text().toStdString();
-    if (source == "Server")
-    {
-        ui->buttonServerListen->setEnabled(true);
-        ui->buttonClientConnect->setEnabled(false);
-    }
-    else if (source == "Client")
-    {
-        ui->buttonServerListen->setEnabled(false);
-        ui->buttonClientConnect->setEnabled(true);
-    }
-}
-
-void SocketGUI::buttonServerListen_clicked(bool)
+void SocketGUI::on_buttonServerListen_clicked(bool)
 {
     if (ui->buttonServerListen->isChecked())
     {
@@ -78,14 +53,8 @@ void SocketGUI::handle_receive(const boost::shared_ptr<std::vector<uint8_t> >& i
         receivedData += QString(byte);
     }
     std::cout << "Address=" << inEndpoint->address().to_string() << ":" << inEndpoint->port() << std::endl;
-    ui->textEditReceive->appendPlainText(receivedData);
-    emit updateReceivedText();
-}
-
-
-void SocketGUI::buttonClientConnect_clicked(bool)
-{
-
+//    ui->textEditReceive->appendPlainText(receivedData);
+    emit updateReceivedText(receivedData);
 }
 
 void  SocketGUI::on_buttonSend_clicked(bool /*inChecked*/)
@@ -114,8 +83,9 @@ void  SocketGUI::on_buttonClear_clicked(bool /*inChecked*/)
     ui->textEditReceive->clear();
 }
 
-void SocketGUI::onUpdateReceivedText()
+void SocketGUI::onUpdateReceivedText(QString inText)
 {
-    PRINT("Signal caught");
-    ui->textEditReceive->update();
+    PRINT("appendPlainText");
+    ui->textEditReceive->appendPlainText(inText);
+//    ui->textEditReceive->update();
 }

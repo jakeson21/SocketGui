@@ -8,8 +8,8 @@
 #include <QMetaType>
 #include <QTextBlock>
 
-#include </home/fuguru/git/UdpServer/udpserver.hpp>
-#include </home/fuguru/git/GenericDelegate/GenericDelegate.h>
+#include <../../UdpServer/udpserver.hpp>
+#include <../../GenericDelegate/GenericDelegate.h>
 
 #include <boost/thread/thread.hpp>
 
@@ -35,15 +35,12 @@ public:
 signals:
     // To communicate with Gui Thread
     // we need to emit a signal
-    void updateReceivedText();
+    void updateReceivedText(QString inText);
 
 public slots:
 
-    void buttonServerClientSelectClick(QAbstractButton* inButton);
-    void buttonClientConnect_clicked(bool inChecked );
-    void buttonServerListen_clicked(bool inChecked );
-    void onUpdateReceivedText();
-
+    void onUpdateReceivedText(QString inText);
+    void on_buttonServerListen_clicked(bool inChecked);
     void on_buttonSend_clicked(bool inChecked);
     void on_buttonClear_clicked(bool inChecked);
 
