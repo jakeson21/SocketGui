@@ -31,11 +31,11 @@
 									<listOptionValue builtIn="false" value="/usr/include/x86_64-linux-gnu/qt5/QtGui"/>
 									<listOptionValue builtIn="false" value="/usr/include/x86_64-linux-gnu/qt5/QtCore"/>
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DaytimeUDP}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tinyxml2}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/xmls}&quot;"/>
 									<listOptionValue builtIn="false" value="/home/fuguru/git/SocketGUI/build-SocketGUI-Desktop-Debug"/>
 									<listOptionValue builtIn="false" value="/usr/include/boost"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/UdpServer}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.439759696" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>

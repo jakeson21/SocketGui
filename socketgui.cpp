@@ -9,9 +9,6 @@ SocketGUI::SocketGUI(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //connect buttonClicked signal to our custom slot 'buttonClick'
-//    connect(ui->buttonServerListen, SIGNAL(clicked(bool)), this, SLOT(buttonServerListen_clicked(bool)));
-
     connect(this, &SocketGUI::updateReceivedText, this, &SocketGUI::onUpdateReceivedText, Qt::QueuedConnection);
 }
 
@@ -53,7 +50,6 @@ void SocketGUI::handle_receive(const boost::shared_ptr<std::vector<uint8_t> >& i
         receivedData += QString(byte);
     }
     std::cout << "Address=" << inEndpoint->address().to_string() << ":" << inEndpoint->port() << std::endl;
-//    ui->textEditReceive->appendPlainText(receivedData);
     emit updateReceivedText(receivedData);
 }
 
@@ -80,12 +76,12 @@ void  SocketGUI::on_buttonSend_clicked(bool /*inChecked*/)
 
 void  SocketGUI::on_buttonClear_clicked(bool /*inChecked*/)
 {
-    ui->textEditReceive->clear();
+    ui->listReceivedMessages->clear();
 }
 
 void SocketGUI::onUpdateReceivedText(QString inText)
 {
     PRINT("appendPlainText");
-    ui->textEditReceive->appendPlainText(inText);
-//    ui->textEditReceive->update();
+    ui->listReceivedMessages->addItem(inText);
+    ui->listReceivedMessages->scrollToBottom();
 }

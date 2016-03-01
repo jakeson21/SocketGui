@@ -8,8 +8,8 @@
 #include <QMetaType>
 #include <QTextBlock>
 
-#include <../../UdpServer/udpserver.hpp>
-#include <../../GenericDelegate/GenericDelegate.h>
+#include <../UdpServer/udpserver.hpp>
+#include <../GenericDelegate/GenericDelegate.h>
 
 #include <boost/thread/thread.hpp>
 
